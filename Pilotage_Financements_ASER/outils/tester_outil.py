@@ -239,6 +239,8 @@ def analyser_module(nom_fichier, code, structure, toutes_procs, modules_globaux)
             if m.group(1) not in tables:
                 erreurs.append(f'{nom_fichier}:{num} : tableau inexistant « {m.group(1)} »')
         for m in re.finditer(r'(?:Range|Names)\("([A-Za-z_]\w*)"\)', brute):
+            if re.fullmatch(r'[A-Z]{1,3}\d+', m.group(1)):
+                continue  # adresse de cellule (ex. "D5"), pas un nom défini
             if m.group(1) not in noms:
                 erreurs.append(f'{nom_fichier}:{num} : nom défini inexistant « {m.group(1)} »')
         for m in re.finditer(r'(\w+)\.ListColumns\("([^"]+)"\)', brute):
